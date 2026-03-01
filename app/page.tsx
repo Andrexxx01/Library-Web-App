@@ -1,23 +1,25 @@
-export default function Home() {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+import Header from "@/components/layout/header";
+import PageShell from "@/components/layout/pageShell";
 
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-neutral-50 px-6">
-      <div className="w-full max-w-xl rounded-xl bg-white p-8 shadow-md">
-        <h1 className="text-display-md font-semibold text-brand-neutral-900">
-          📚 Library Web App
-        </h1>
+    <>
+      <Header cartCount={0} isAuthenticated={false} />
 
-        <div className="mt-6 rounded-md bg-brand-neutral-100 p-4">
-          <p className="text-sm font-medium text-brand-neutral-700">
-            NEXT_PUBLIC_API_BASE_URL:
-          </p>
+      <PageShell>
+        <section id="hero" className="min-h-[60vh] bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-10">
+            <h1 className="text-display-lg font-semibold">Hero Section</h1>
+            <p className="mt-2 text-zinc-600">
+              Placeholder untuk big picture di bawah navbar.
+            </p>
+          </div>
+        </section>
 
-          <p className="mt-2 break-all text-sm text-brand-primary-300">
-            {apiBaseUrl || "❌ Environment variable not found"}
-          </p>
-        </div>
-      </div>
-    </div>
+        <section className="mx-auto max-w-7xl px-4 py-10">
+          <div className="h-300 rounded-xl border bg-white" />
+        </section>
+      </PageShell>
+    </>
   );
 }
