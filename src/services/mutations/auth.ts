@@ -27,11 +27,11 @@ export type RegisterPayload = {
 };
 
 /* =========================
-   Response Types (based on your Swagger)
+   Response Types (Swagger)
 ========================= */
 
-type LoginResponse = ApiResponse<LoginData>; // 200
-type RegisterResponse = ApiResponse<User>; // 201
+export type LoginResponse = ApiResponse<LoginData>; // 200
+export type RegisterResponse = ApiResponse<User>; // 201
 
 /* =========================
    Mutations
@@ -50,7 +50,6 @@ export function useLoginMutation() {
       api.post<LoginResponse>(ENDPOINTS.auth.login, payload, { auth: false }),
 
     onSuccess: (res) => {
-      // res.data = { token, user }
       dispatch(
         setCredentials({
           token: res.data.token,

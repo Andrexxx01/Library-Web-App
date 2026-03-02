@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 type AppHeaderProps = {
@@ -29,6 +29,7 @@ export default function Header({
 }: AppHeaderProps) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [draftSearch, setDraftSearch] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const showBadge = cartCount > 0;
 
@@ -64,7 +65,10 @@ export default function Header({
               {/* Search Icon */}
               <motion.button
                 type="button"
-                onClick={() => setMobileSearchOpen(true)}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setMobileSearchOpen(true);
+                }}
                 className="relative inline-flex h-10 w-10 items-center justify-center rounded-full"
                 whileHover={iconHover}
                 whileTap={{ scale: 0.95 }}
@@ -95,18 +99,25 @@ export default function Header({
                 ) : null}
               </motion.button>
 
-              {/* Menu Icon */}
+              {/* Menu Icon / Close Icon (toggle) */}
               <motion.button
                 type="button"
                 onClick={() => {
-                  // nanti buka dropdown menu
+                  setMobileSearchOpen(false);
+                  setDraftSearch("");
+                  setMobileMenuOpen((v) => !v);
                 }}
                 className="relative inline-flex h-10 w-10 items-center justify-center rounded-full"
                 whileHover={iconHover}
                 whileTap={{ scale: 0.95 }}
-                aria-label="Open menu"
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
-                <Image src="/Menu.svg" alt="Menu" width={22} height={22} />
+                <Image
+                  src={mobileMenuOpen ? "/x-close.svg" : "/Menu.svg"}
+                  alt={mobileMenuOpen ? "Close" : "Menu"}
+                  width={22}
+                  height={22}
+                />
               </motion.button>
             </>
           ) : (
@@ -183,6 +194,57 @@ export default function Header({
           )}
         </div>
       </div>
+      {/* Mobile Menu Dropdown (Login/Register) */}
+      <AnimatePresence>
+        {mobileMenuOpen && !mobileSearchOpen && !isAuthenticated ? (
+          <motion.div
+            key="mobile-menu"
+            initial={{ height: 0, opacity: 0, y: -8 }}
+            animate={{ height: "auto", opacity: 1, y: 0 }}
+            exit={{ height: 0, opacity: 0, y: -8 }}
+            transition={{ type: "spring", stiffness: 320, damping: 28 }}
+            className="border-t bg-white md:hidden"
+          >
+            <div className="mx-auto max-w-7xl px-4 py-4">
+              <div className="flex items-center gap-4">
+                <motion.div
+                  className="flex-1"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button
+                    variant="outline"
+                    className="h-12 w-full rounded-full"
+                    asChild
+                  >
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                  </Button>
+                </motion.div>
+
+                <motion.div
+                  className="flex-1"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button className="h-12 w-full rounded-full" asChild>
+                    <Link
+                      href="/register"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Register
+                    </Link>
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

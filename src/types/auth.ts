@@ -1,3 +1,5 @@
+import type { ApiResponse } from "./api";
+
 export type UserRole = "USER" | "ADMIN";
 
 export type User = {
@@ -21,3 +23,5 @@ export type LoginData = {
   token: string;
   user: User;
 };
+
+export type LoginResponse = ApiResponse<LoginData>;

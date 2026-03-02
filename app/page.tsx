@@ -1,5 +1,9 @@
 import Header from "@/components/layout/header";
 import PageShell from "@/components/layout/pageShell";
+import HeroSection from "@/components/home/heroSection";
+import RecommendationSection from "@/components/home/recommendationSection";
+import PopularAuthorsSection from "@/components/home/popularAuthorsSection";
+import Footer from "@/components/layout/footer";
 
 export default function HomePage() {
   return (
@@ -7,19 +11,13 @@ export default function HomePage() {
       <Header cartCount={0} isAuthenticated={false} />
 
       <PageShell>
-        <section id="hero" className="min-h-[60vh] bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-10">
-            <h1 className="text-display-lg font-semibold">Hero Section</h1>
-            <p className="mt-2 text-zinc-600">
-              Placeholder untuk big picture di bawah navbar.
-            </p>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 py-10">
-          <div className="h-300 rounded-xl border bg-white" />
-        </section>
+        <div id="hero">
+          <HeroSection />
+        </div>
+        <RecommendationSection />
+        <PopularAuthorsSection />
       </PageShell>
+      <Footer />
     </>
   );
 }
