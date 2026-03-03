@@ -1,25 +1,23 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hooks";
 
 type Props = { children: React.ReactNode };
 
-export default function AuthGuard({ children }: Props) {
+export default function PublicOnlyGuard({ children }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
-
   const { token, user, isAuthenticated } = useAppSelector((s) => s.auth);
+
   const loggedIn = Boolean(isAuthenticated && token && user);
 
   useEffect(() => {
-    if (!loggedIn) {
-      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
-    }
-  }, [loggedIn, pathname, router]);
+    if (loggedIn) router.replace("/");
+  }, [loggedIn, router]);
 
-  if (!loggedIn) return null;
+  // kalau sudah login, jangan render halaman login/register
+  if (loggedIn) return null;
 
   return <>{children}</>;
 }

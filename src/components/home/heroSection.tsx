@@ -48,7 +48,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="bg-white">
+    <section id="hero"className="bg-white">
       <div className="mx-auto max-w-7xl px-4 pt-4 md:pt-8">
         {/* Banner */}
         <div className="overflow-hidden rounded-3xl bg-brand-neutral-100">

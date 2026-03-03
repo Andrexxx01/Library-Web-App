@@ -5,7 +5,6 @@ import { api, ApiError } from "@/services/api/client";
 import { ENDPOINTS } from "@/services/api/endpoints";
 import { setCredentials } from "@/store/authSlice";
 import { useAppDispatch } from "@/store/hooks";
-
 import type { ApiResponse } from "@/types/api";
 import type { LoginData, User } from "@/types/auth";
 
@@ -23,8 +22,10 @@ export type RegisterPayload = {
   email: string;
   phone: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword: string; // UI only (NOT sent to backend)
 };
+
+type RegisterApiPayload = Omit<RegisterPayload, "confirmPassword">;
 
 /* =========================
    Response Types (Swagger)
@@ -67,9 +68,11 @@ export function useLoginMutation() {
  */
 export function useRegisterMutation() {
   return useMutation<RegisterResponse, ApiError, RegisterPayload>({
-    mutationFn: (payload) =>
-      api.post<RegisterResponse>(ENDPOINTS.auth.register, payload, {
-        auth: false,
-      }),
+    mutationFn: ({ confirmPassword: _confirmPassword, ...payload }) =>
+      api.post<RegisterResponse>(
+        ENDPOINTS.auth.register,
+        payload as RegisterApiPayload,
+        { auth: false },
+      ),
   });
 }

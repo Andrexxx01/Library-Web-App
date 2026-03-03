@@ -4,13 +4,13 @@ import type { Pagination } from "@/types/api";
 export type RecommendMode = "popular" | "rating" ; 
 
 export type RecommendBooksData = {
-  mode: RecommendMode | string;
+  mode: RecommendMode;
   books: Book[];
   pagination: Pagination;
 };
 
 export type RecommendBooksParams = {
-  by?: "popular"; 
+  by?: RecommendMode; 
   page?: number;
   limit?: number;
 };

@@ -3,33 +3,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
-import { useAppDispatch } from "@/store/hooks";
-import { setCredentials } from "@/store/authSlice";
 import { useLoginMutation } from "@/services/mutations/auth";
 
 const loginSchema = z.object({
   email: z
     .string()
     .min(1, "Email is required.")
-    .email("Please enter a valid email (must include '@' and a domain)."),
+    .refine(
+      (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+      "Please enter a valid email (must include '@' and a domain).",
+    ),
   password: z.string().min(6, "Password must be at least 6 characters."),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+function sanitizeNext(nextUrl: string | null) {
+  // Only allow internal paths to avoid open-redirect
+  if (!nextUrl) return "/";
+  if (!nextUrl.startsWith("/")) return "/";
+  if (nextUrl.startsWith("//")) return "/";
+  return nextUrl;
+}
+
 export default function LoginPage() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const nextUrl = sanitizeNext(searchParams.get("next"));
+  const emailFromQuery = searchParams.get("email") || "";
   const loginMutation = useLoginMutation();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -38,7 +47,7 @@ export default function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: emailFromQuery, password: "" },
   });
 
   const isLoading = useMemo(
@@ -48,17 +57,9 @@ export default function LoginPage() {
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      const res = await loginMutation.mutateAsync(values);
-
-      dispatch(
-        setCredentials({
-          token: res.data.token,
-          user: res.data.user,
-        }),
-      );
-
+      await loginMutation.mutateAsync(values);
       toast.success("Login successful.");
-      router.replace("/"); // balik ke home
+      router.replace(nextUrl);
     } catch (e: any) {
       toast.error(e?.message || "Login failed. Please try again.");
     }
@@ -156,7 +157,7 @@ export default function LoginPage() {
             <p className="text-center text-xs text-brand-neutral-700">
               Don&apos;t have an account?{" "}
               <Link
-                href="/register"
+                href={`/register?next=${encodeURIComponent(nextUrl)}`}
                 className="font-medium text-brand-primary-300 underline-offset-2 hover:underline"
               >
                 Register

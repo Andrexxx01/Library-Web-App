@@ -1,4 +1,4 @@
-import Header from "@/components/layout/header";
+import HeaderContainer from "@/components/layout/headerContainer";
 import PageShell from "@/components/layout/pageShell";
 import HeroSection from "@/components/home/heroSection";
 import RecommendationSection from "@/components/home/recommendationSection";
@@ -8,15 +8,14 @@ import Footer from "@/components/layout/footer";
 export default function HomePage() {
   return (
     <>
-      <Header cartCount={0} isAuthenticated={false} />
+      <HeaderContainer />
 
       <PageShell>
-        <div id="hero">
-          <HeroSection />
-        </div>
+        <HeroSection />
         <RecommendationSection />
         <PopularAuthorsSection />
       </PageShell>
+
       <Footer />
     </>
   );

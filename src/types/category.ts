@@ -4,3 +4,7 @@ export type Category = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CategoriesData = {
+  categories: Category[];
+};

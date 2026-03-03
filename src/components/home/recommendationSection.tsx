@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRecommendBooksQuery } from "@/services/queries/recommend";
+import BookCard from "@/components/common/bookCard";
 
 function useIsDesktop(breakpointPx = 768) {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -124,55 +123,13 @@ export default function RecommendationSection({
           <>
             <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-6">
               {shownBooks.map((b) => (
-                <motion.button
+                <BookCard
                   key={b.id}
-                  type="button"
+                  book={b}
                   onClick={() => {
                     // nanti: router.push(`/books/${b.id}`)
                   }}
-                  className="
-                    overflow-hidden text-left
-                    rounded-2xl bg-white
-                    shadow-[0px_10px_22px_rgba(0,0,0,0.06)]
-                    ring-1 ring-black/5
-                    cursor-pointer
-                  "
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="relative aspect-3/4 w-full bg-brand-neutral-100">
-                    <Image
-                      src={b.coverImage || "/placeholder-cover.jpg"}
-                      alt={b.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 20vw"
-                    />
-                  </div>
-
-                  <div className="p-3">
-                    <p className="text-sm font-semibold text-black md:text-base">
-                      {b.title || "Book Name"}
-                    </p>
-                    <p className="mt-1 text-xs text-zinc-500 md:text-sm">
-                      {b.author?.name || "Author name"}
-                    </p>
-
-                    <div className="mt-2 flex items-center gap-2">
-                      <Image
-                        src="/Star.svg"
-                        alt="Star"
-                        width={16}
-                        height={16}
-                      />
-                      <span className="text-xs font-semibold text-zinc-700 md:text-sm">
-                        {typeof b.rating === "number"
-                          ? b.rating.toFixed(1)
-                          : "0.0"}
-                      </span>
-                    </div>
-                  </div>
-                </motion.button>
+                />
               ))}
             </div>
 
