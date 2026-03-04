@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { usePopularAuthorsQuery } from "@/services/queries/authors";
+import { useRouter } from "next/navigation";
 
 type Props = {
   title?: string;
@@ -15,17 +16,16 @@ export default function PopularAuthorsSection({
   const { data, isLoading, isError, error, refetch, isFetching } =
     usePopularAuthorsQuery({ limit: 10 });
 
+  const router = useRouter();
   const authors = data?.data.authors ?? [];
   const top4 = useMemo(() => authors.slice(0, 4), [authors]);
 
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-12">
-        {/* Divider line (sesuai feel figma) */}
+        {/* Divider line */}
         <div className="mb-10 h-px w-full bg-zinc-200" />
-
         <h2 className="text-2xl font-bold text-black md:text-4xl">{title}</h2>
-
         {/* Loading */}
         {isLoading ? (
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -45,7 +45,6 @@ export default function PopularAuthorsSection({
             ))}
           </div>
         ) : null}
-
         {/* Error */}
         {isError ? (
           <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -65,7 +64,6 @@ export default function PopularAuthorsSection({
             </button>
           </div>
         ) : null}
-
         {/* Cards */}
         {!isLoading && !isError ? (
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -74,7 +72,7 @@ export default function PopularAuthorsSection({
                 key={a.id}
                 type="button"
                 onClick={() => {
-                  // nanti: router.push(`/authors/${a.id}`)
+                  router.push(`/author/${a.id}`)
                 }}
                 className="
                   w-full cursor-pointer text-left
@@ -96,12 +94,10 @@ export default function PopularAuthorsSection({
                       sizes="64px"
                     />
                   </div>
-
                   <div className="min-w-0">
                     <p className="truncate text-base font-semibold text-black">
                       {a.name || "Author name"}
                     </p>
-
                     <div className="mt-2 flex items-center gap-2">
                       <Image
                         src="/Book.svg"
@@ -119,8 +115,7 @@ export default function PopularAuthorsSection({
             ))}
           </div>
         ) : null}
-
-        {/* Bottom divider line (sesuai figma desktop) */}
+        {/* Bottom divider line */}
         <div className="mt-12 h-px w-full bg-zinc-200" />
       </div>
     </section>

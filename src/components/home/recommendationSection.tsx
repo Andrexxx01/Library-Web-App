@@ -15,7 +15,6 @@ function useIsDesktop(breakpointPx = 768) {
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, [breakpointPx]);
-
   return isDesktop;
 }
 
@@ -27,20 +26,16 @@ export default function RecommendationSection({
   title = "Recommendation",
 }: Props) {
   const isDesktop = useIsDesktop(768);
-
   const [limit, setLimit] = useState(30);
   const [visibleCount, setVisibleCount] = useState(10);
-
   const { data, isLoading, isError, error, refetch, isFetching } =
     useRecommendBooksQuery({
       by: "popular",
       page: 1,
       limit,
     });
-
   const books = data?.data.books ?? [];
   const pagination = data?.data.pagination;
-
   const step = isDesktop ? 5 : 2;
 
   useEffect(() => {
@@ -79,7 +74,6 @@ export default function RecommendationSection({
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-4 pb-12">
         <h2 className="text-2xl font-bold text-black md:text-4xl">{title}</h2>
-
         {/* Loading */}
         {isLoading ? (
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-6">
@@ -98,7 +92,6 @@ export default function RecommendationSection({
             ))}
           </div>
         ) : null}
-
         {/* Error */}
         {isError ? (
           <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -117,7 +110,6 @@ export default function RecommendationSection({
             </Button>
           </div>
         ) : null}
-
         {/* Grid */}
         {!isLoading && !isError ? (
           <>
@@ -126,13 +118,9 @@ export default function RecommendationSection({
                 <BookCard
                   key={b.id}
                   book={b}
-                  onClick={() => {
-                    // nanti: router.push(`/books/${b.id}`)
-                  }}
                 />
               ))}
             </div>
-
             {/* Load More */}
             {showLoadMoreButton ? (
               <div className="mt-8 flex justify-center">

@@ -8,10 +8,6 @@ import { useAppDispatch } from "@/store/hooks";
 import type { ApiResponse } from "@/types/api";
 import type { LoginData, User } from "@/types/auth";
 
-/* =========================
-   Request Payload Types
-========================= */
-
 export type LoginPayload = {
   email: string;
   password: string;
@@ -22,34 +18,20 @@ export type RegisterPayload = {
   email: string;
   phone: string;
   password: string;
-  confirmPassword: string; // UI only (NOT sent to backend)
+  confirmPassword: string; 
 };
 
 type RegisterApiPayload = Omit<RegisterPayload, "confirmPassword">;
 
-/* =========================
-   Response Types (Swagger)
-========================= */
+export type LoginResponse = ApiResponse<LoginData>; 
+export type RegisterResponse = ApiResponse<User>; 
 
-export type LoginResponse = ApiResponse<LoginData>; // 200
-export type RegisterResponse = ApiResponse<User>; // 201
-
-/* =========================
-   Mutations
-========================= */
-
-/**
- * Login mutation:
- * - POST /api/auth/login (200)
- * - On success: save token + user into Redux via setCredentials
- */
 export function useLoginMutation() {
   const dispatch = useAppDispatch();
 
   return useMutation<LoginResponse, ApiError, LoginPayload>({
     mutationFn: (payload) =>
       api.post<LoginResponse>(ENDPOINTS.auth.login, payload, { auth: false }),
-
     onSuccess: (res) => {
       dispatch(
         setCredentials({
@@ -61,11 +43,6 @@ export function useLoginMutation() {
   });
 }
 
-/**
- * Register mutation:
- * - POST /api/auth/register (201)
- * - On success: returns the created user (no token)
- */
 export function useRegisterMutation() {
   return useMutation<RegisterResponse, ApiError, RegisterPayload>({
     mutationFn: ({ confirmPassword: _confirmPassword, ...payload }) =>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 type HeroSlide = {
   id: number;
@@ -36,7 +37,7 @@ const CATEGORIES: CategoryCard[] = [
 
 export default function HeroSection() {
   const [active, setActive] = useState(0);
-
+  const router = useRouter();
   const paginationSrc = useMemo(() => {
     if (active === 0) return "/pagination-left.svg";
     if (active === 1) return "/pagination-middle.svg";
@@ -79,7 +80,6 @@ export default function HeroSection() {
             </AnimatePresence>
           </div>
         </div>
-
         {/* Pagination */}
         <div className="flex items-center justify-center py-3">
           <motion.button
@@ -99,7 +99,6 @@ export default function HeroSection() {
             />
           </motion.button>
         </div>
-
         {/* Category Cards */}
         <div
           className="
@@ -114,7 +113,7 @@ export default function HeroSection() {
               key={c.key}
               type="button"
               onClick={() => {
-                // nanti: route ke /books?categoryId=...
+                router.push(`/categories?category=${c.key}`);
               }}
               className="
                 group cursor-pointer text-left
@@ -136,7 +135,6 @@ export default function HeroSection() {
                   />
                 </div>
               </div>
-
               <p className="mt-3 whitespace-pre-line text-sm font-semibold text-black md:text-base">
                 {c.label}
               </p>

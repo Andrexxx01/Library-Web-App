@@ -27,9 +27,9 @@ export const ENDPOINTS = {
   // ===== LOANS =====
   loans: {
     myLoans: "/api/loans/my",
-    borrow: "/api/loans",
+    create: "/api/loans",
     return: (loanId: number) => `/api/loans/${loanId}/return`,
-    confirmFromCart: "/api/loans/from-cart",
+    fromCart: "/api/loans/from-cart",
   },
 
   // ===== PROFILE =====
@@ -53,7 +53,7 @@ export const ENDPOINTS = {
     clearCart: "/api/cart",
     checkout: "/api/cart/checkout",
     addItem: "/api/cart/items",
-    deleteItem: (cartItemId: number) => `/api/cart/items/${cartItemId}`,
+    deleteItem: (ItemId: number) => `/api/cart/items/${ItemId}`,
   },
 
   // ===== ADMIN =====

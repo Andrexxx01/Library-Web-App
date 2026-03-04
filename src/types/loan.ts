@@ -1,4 +1,6 @@
-export type LoanStatus = "BORROWED" | "RETURNED";
+import type { Pagination } from "@/types/api";
+
+export type LoanStatus = "BORROWED" | "RETURNED" | "LATE";
 
 export type LoanBookLite = {
   id: number;
@@ -6,7 +8,7 @@ export type LoanBookLite = {
   coverImage: string | null;
 };
 
-export type Loan = {
+export type LoanRaw = {
   id: number;
   userId: number;
   bookId: number;
@@ -17,22 +19,29 @@ export type Loan = {
   book: LoanBookLite;
 };
 
-export type MyLoansData = {
-  loans: Loan[];
+export type Loan = LoanRaw;
+
+export type LoansDataRaw = {
+  loans: LoanRaw[];
+  pagination: Pagination;
 };
+
+export type LoansData = {
+  loans: Loan[];
+  pagination: Pagination;
+};
+
+export type MyLoansData = LoansData;
 
 export type BorrowDays = 3 | 5 | 10;
 
-// direct flow
 export type CreateLoanPayload = {
   bookId: number;
-  days: BorrowDays;
+  durationDays: BorrowDays;
 };
 
-// normal flow (from cart)
 export type CreateLoansFromCartPayload = {
-  itemIds: number[]; // cartItemIds
-  days: BorrowDays;
+  itemIds: number[];
+  durationDays: BorrowDays;
   borrowDate: string;
 };
-

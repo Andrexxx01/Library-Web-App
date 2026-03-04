@@ -36,10 +36,8 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const router = useRouter();
   const registerMutation = useRegisterMutation();
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -86,14 +84,12 @@ export default function RegisterPage() {
             <Image src="/Logo.svg" alt="Booky" width={22} height={22} />
             <span className="text-base font-semibold text-black">Booky</span>
           </div>
-
           <h1 className="mt-4 text-center text-xl font-semibold text-black md:text-left">
             Register
           </h1>
           <p className="mt-1 text-center text-xs text-brand-neutral-600 md:text-left">
             Create your account to start borrowing books.
           </p>
-
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             {/* Name */}
             <div className="space-y-2">
@@ -112,7 +108,6 @@ export default function RegisterPage() {
                 </p>
               ) : null}
             </div>
-
             {/* Email */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-black">Email</label>
@@ -130,7 +125,6 @@ export default function RegisterPage() {
                 </p>
               ) : null}
             </div>
-
             {/* Nomor Handphone */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-black">
@@ -150,11 +144,9 @@ export default function RegisterPage() {
                 </p>
               ) : null}
             </div>
-
             {/* Password */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-black">Password</label>
-
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -180,20 +172,17 @@ export default function RegisterPage() {
                   />
                 </button>
               </div>
-
               {errors.password ? (
                 <p className="text-[10px] text-pink-600">
                   {errors.password.message}
                 </p>
               ) : null}
             </div>
-
             {/* Confirm Password */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-black">
                 Confirm Password
               </label>
-
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -227,14 +216,12 @@ export default function RegisterPage() {
                   />
                 </button>
               </div>
-
               {errors.confirmPassword ? (
                 <p className="text-[10px] text-pink-600">
                   {errors.confirmPassword.message}
                 </p>
               ) : null}
             </div>
-
             {/* Button */}
             <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
               <Button
@@ -245,7 +232,6 @@ export default function RegisterPage() {
                 {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </motion.div>
-
             <p className="text-center text-xs text-brand-neutral-700">
               Already have an account?{" "}
               <Link

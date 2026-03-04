@@ -16,7 +16,6 @@ export default function PublicOnlyGuard({ children }: Props) {
     if (loggedIn) router.replace("/");
   }, [loggedIn, router]);
 
-  // kalau sudah login, jangan render halaman login/register
   if (loggedIn) return null;
 
   return <>{children}</>;

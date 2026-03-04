@@ -26,7 +26,6 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 function sanitizeNext(nextUrl: string | null) {
-  // Only allow internal paths to avoid open-redirect
   if (!nextUrl) return "/";
   if (!nextUrl.startsWith("/")) return "/";
   if (nextUrl.startsWith("//")) return "/";
@@ -74,14 +73,12 @@ export default function LoginPage() {
             <Image src="/Logo.svg" alt="Booky" width={22} height={22} />
             <span className="text-base font-semibold text-black">Booky</span>
           </div>
-
           <h1 className="mt-4 text-center text-xl font-semibold text-black md:text-left">
             Login
           </h1>
           <p className="mt-1 text-center text-xs text-brand-neutral-600 md:text-left">
             Sign in to manage your library account.
           </p>
-
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
             {/* Email */}
             <div className="space-y-2">
@@ -103,11 +100,9 @@ export default function LoginPage() {
                 </p>
               ) : null}
             </div>
-
             {/* Password */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-black">Password</label>
-
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -120,7 +115,6 @@ export default function LoginPage() {
                       : "border-brand-neutral-200 focus-visible:ring-2 focus-visible:ring-brand-primary-300",
                   ].join(" ")}
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
@@ -135,14 +129,12 @@ export default function LoginPage() {
                   />
                 </button>
               </div>
-
               {errors.password ? (
                 <p className="text-[10px] text-pink-600">
                   {errors.password.message}
                 </p>
               ) : null}
             </div>
-
             {/* Button */}
             <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
               <Button
@@ -153,7 +145,6 @@ export default function LoginPage() {
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
             </motion.div>
-
             <p className="text-center text-xs text-brand-neutral-700">
               Don&apos;t have an account?{" "}
               <Link

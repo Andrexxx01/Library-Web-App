@@ -34,7 +34,6 @@ export default function ReviewCard({ review }: { review: Review }) {
             className="object-cover"
           />
         </div>
-
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-neutral-900">
             {review.user?.name}
@@ -44,7 +43,6 @@ export default function ReviewCard({ review }: { review: Review }) {
           </p>
         </div>
       </div>
-
       <div className="mt-3">
         <Stars value={review.star} />
         <p className="mt-3 text-sm leading-6 text-neutral-700">

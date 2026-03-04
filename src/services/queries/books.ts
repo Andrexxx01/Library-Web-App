@@ -100,11 +100,6 @@ export function useBookSearchQuery(q: string, limit = 20) {
   });
 }
 
-/**
- * Related books (bagian ketiga detail page):
- * - categoryId wajib (diambil dari book detail)
- * - default limit 6, page 1
- */
 export function useRelatedBooksQuery(categoryId?: number, page = 1, limit = 6) {
   return useQuery<BooksListResponse>({
     queryKey: bookKeys.related(categoryId ?? 0, page, limit),

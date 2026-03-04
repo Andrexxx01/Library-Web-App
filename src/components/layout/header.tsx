@@ -27,7 +27,6 @@ function useDebouncedValue<T>(value: T, delayMs: number) {
     const t = setTimeout(() => setDebounced(value), delayMs);
     return () => clearTimeout(t);
   }, [value, delayMs]);
-
   return debounced;
 }
 
@@ -47,29 +46,20 @@ export default function Header({
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [draftSearch, setDraftSearch] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // user dropdown states
   const [mobileUserMenuOpen, setMobileUserMenuOpen] = useState(false);
   const [desktopUserMenuOpen, setDesktopUserMenuOpen] = useState(false);
-
-  // ===== SEARCH (added) =====
-  const [searchOpen, setSearchOpen] = useState(false); // dropdown open/close
-  const [activeIndex, setActiveIndex] = useState(-1); // keyboard highlight
+  const [searchOpen, setSearchOpen] = useState(false); 
+  const [activeIndex, setActiveIndex] = useState(-1); 
   const [searchLimit, setSearchLimit] = useState(20);
-
   const debouncedSearch = useDebouncedValue(draftSearch, 300);
-
-  const searchWrapRef = useRef<HTMLDivElement | null>(null); // input wrapper
-  const dropdownRef = useRef<HTMLDivElement | null>(null); // dropdown wrapper
-
+  const searchWrapRef = useRef<HTMLDivElement | null>(null); 
+  const dropdownRef = useRef<HTMLDivElement | null>(null); 
   const searchQuery = useBookSearchQuery(debouncedSearch, searchLimit);
   const searchBooks = searchQuery.data?.data.books ?? [];
   const searchPagination = searchQuery.data?.data.pagination;
-
   const keyword = debouncedSearch.trim();
   const showSearchDropdown = searchOpen && keyword.length > 0;
 
-  // auto increase limit (+10) kalau books.length == limit dan total > limit
   useEffect(() => {
     if (!showSearchDropdown) return;
     if (!searchPagination) return;
@@ -80,13 +70,11 @@ export default function Header({
     }
   }, [showSearchDropdown, searchBooks.length, searchLimit, searchPagination]);
 
-  // reset limit + activeIndex saat keyword berubah
   useEffect(() => {
     setSearchLimit(20);
     setActiveIndex(-1);
   }, [debouncedSearch]);
 
-  // close dropdown when input cleared
   useEffect(() => {
     if (draftSearch.trim().length === 0) {
       setSearchOpen(false);
@@ -94,7 +82,6 @@ export default function Header({
     }
   }, [draftSearch]);
 
-  // click outside close dropdown
   useEffect(() => {
     const onPointerDown = (e: Event) => {
       if (!showSearchDropdown) return;
@@ -110,9 +97,7 @@ export default function Header({
         setActiveIndex(-1);
       }
     };
-
     document.addEventListener("pointerdown", onPointerDown);
-
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
     };
@@ -120,10 +105,8 @@ export default function Header({
 
   const router = useRouter();
   const pathname = usePathname();
-
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
-
   const displayName = user?.name ?? "John Doe";
 
   const avatarSrc =
@@ -140,26 +123,19 @@ export default function Header({
 
   const handleLogoClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (pathname !== "/") return;
-
     e.preventDefault();
-
     setMobileMenuOpen(false);
     setMobileSearchOpen(false);
     setMobileUserMenuOpen(false);
     setDesktopUserMenuOpen(false);
-
-    // close search dropdown
     setSearchOpen(false);
     setActiveIndex(-1);
-
     setDraftSearch("");
-
     const el = document.getElementById("hero");
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-
     router.push("/#hero");
   };
 
@@ -169,11 +145,8 @@ export default function Header({
     setDesktopUserMenuOpen(false);
     setMobileMenuOpen(false);
     setMobileSearchOpen(false);
-
-    // close search dropdown
     setSearchOpen(false);
     setActiveIndex(-1);
-
     setDraftSearch("");
     router.replace("/");
   };
@@ -186,10 +159,7 @@ export default function Header({
   function goToBookByIndex(index: number) {
     const book = searchBooks[index];
     if (!book) return;
-
     router.push(`/books/${book.id}`);
-
-    // close & clear
     setMobileSearchOpen(false);
     setDraftSearch("");
     closeSearchDropdownOnly();
@@ -197,7 +167,6 @@ export default function Header({
 
   function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (!showSearchDropdown) return;
-
     if (e.key === "ArrowDown") {
       e.preventDefault();
       if (searchBooks.length === 0) return;
@@ -251,12 +220,10 @@ export default function Header({
               priority
             />
           </motion.div>
-
           <span className="hidden text-2xl font-bold text-black md:inline">
             Booky
           </span>
         </Link>
-
         {/* RIGHT: Mobile */}
         <div className="flex items-center gap-3 md:hidden">
           {!mobileSearchOpen ? (
@@ -268,8 +235,6 @@ export default function Header({
                   setMobileMenuOpen(false);
                   setMobileUserMenuOpen(false);
                   setMobileSearchOpen(true);
-
-                  // open dropdown when typing later
                   setSearchOpen(true);
                 }}
                 className="relative inline-flex h-10 w-10 items-center justify-center rounded-full"
@@ -290,14 +255,12 @@ export default function Header({
                 aria-label="Open cart"
               >
                 <Image src="/Bag.svg" alt="Cart" width={22} height={22} />
-
                 {showBadge ? (
                   <span className="absolute -right-1 -top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-semibold text-white">
                     {cartBadgeText}
                   </span>
                 ) : null}
               </motion.button>
-
               {/* Menu / Avatar */}
               {!isAuthenticated ? (
                 <motion.button
@@ -306,7 +269,6 @@ export default function Header({
                     setMobileSearchOpen(false);
                     setDraftSearch("");
                     closeSearchDropdownOnly();
-
                     setMobileUserMenuOpen(false);
                     setMobileMenuOpen((v) => !v);
                   }}
@@ -329,7 +291,6 @@ export default function Header({
                     setMobileSearchOpen(false);
                     setDraftSearch("");
                     closeSearchDropdownOnly();
-
                     setMobileMenuOpen(false);
                     setMobileUserMenuOpen((v) => !v);
                   }}
@@ -368,7 +329,6 @@ export default function Header({
                     height={18}
                   />
                 </span>
-
                 <input
                   value={draftSearch}
                   onChange={(e) => {
@@ -385,7 +345,6 @@ export default function Header({
                   "
                 />
               </div>
-
               <motion.button
                 type="button"
                 onClick={() => {
@@ -403,7 +362,6 @@ export default function Header({
             </div>
           )}
         </div>
-
         {/* RIGHT: Desktop */}
         <div className="hidden items-center gap-4 md:flex">
           {!isAuthenticated ? (
@@ -420,7 +378,6 @@ export default function Header({
                   <Link href="/login">Login</Link>
                 </Button>
               </motion.div>
-
               <motion.div
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
@@ -458,7 +415,6 @@ export default function Header({
                   "
                 />
               </div>
-
               {/* Cart */}
               <motion.button
                 type="button"
@@ -475,7 +431,6 @@ export default function Header({
                   </span>
                 ) : null}
               </motion.button>
-
               {/* User block */}
               <div className="relative">
                 <motion.button
@@ -509,12 +464,10 @@ export default function Header({
                         className="h-8.5 w-8.5 rounded-full object-cover"
                       />
                     )}
-
                     <span className="text-sm font-semibold text-black">
                       {displayName}
                     </span>
                   </motion.div>
-
                   <Image
                     src="/chevron-down.svg"
                     alt="Open"
@@ -522,7 +475,6 @@ export default function Header({
                     height={18}
                   />
                 </motion.button>
-
                 {/* Desktop Dropdown */}
                 <AnimatePresence>
                   {desktopUserMenuOpen ? (
@@ -540,7 +492,7 @@ export default function Header({
                     >
                       {[
                         { label: "Profile", href: "/profile" },
-                        { label: "Borrowed List", href: "/my-loans" },
+                        { label: "Borrowed List", href: "/myLoan" },
                         { label: "Reviews", href: "/profile#reviews" },
                       ].map((item) => (
                         <motion.button
@@ -557,7 +509,6 @@ export default function Header({
                           {item.label}
                         </motion.button>
                       ))}
-
                       <motion.button
                         type="button"
                         onClick={handleLogout}
@@ -575,7 +526,6 @@ export default function Header({
           )}
         </div>
       </div>
-
       {/* Mobile Menu Dropdown (Login/Register) */}
       <AnimatePresence>
         {mobileMenuOpen && !mobileSearchOpen && !isAuthenticated ? (
@@ -607,7 +557,6 @@ export default function Header({
                     </Link>
                   </Button>
                 </motion.div>
-
                 <motion.div
                   className="flex-1"
                   whileHover={{ scale: 1.02 }}
@@ -627,7 +576,6 @@ export default function Header({
           </motion.div>
         ) : null}
       </AnimatePresence>
-
       {/* Mobile User Dropdown (Authenticated) */}
       <AnimatePresence>
         {mobileUserMenuOpen && !mobileSearchOpen && isAuthenticated ? (
@@ -660,7 +608,6 @@ export default function Header({
                     {item.label}
                   </motion.button>
                 ))}
-
                 <motion.button
                   type="button"
                   onClick={handleLogout}
@@ -675,7 +622,6 @@ export default function Header({
           </motion.div>
         ) : null}
       </AnimatePresence>
-
       {/* SEARCH DROPDOWN (floating, follow header) */}
       <AnimatePresence>
         {showSearchDropdown ? (
@@ -698,19 +644,16 @@ export default function Header({
                       Searching...
                     </div>
                   ) : null}
-
                   {!searchQuery.isLoading && searchBooks.length === 0 ? (
                     <div className="px-3 py-6 text-center text-sm text-brand-neutral-600">
                       No books found.
                     </div>
                   ) : null}
-
                   {!searchQuery.isLoading && searchBooks.length > 0 ? (
                     <div className="max-h-[60vh] overflow-auto">
                       <div className="space-y-2 p-1">
                         {searchBooks.map((b, idx) => {
                           const active = idx === activeIndex;
-
                           return (
                             <motion.button
                               key={b.id}
@@ -732,16 +675,13 @@ export default function Header({
                                     className="h-full w-full object-cover"
                                   />
                                 </div>
-
                                 <div className="min-w-0 flex-1">
                                   <p className="truncate text-sm font-bold text-black">
                                     {b.title}
                                   </p>
-
                                   <p className="mt-1 truncate text-xs text-brand-neutral-600">
                                     {b.author?.name ?? "Unknown author"}
                                   </p>
-
                                   <div className="mt-1 flex items-center gap-1 text-xs text-brand-neutral-600">
                                     <Image
                                       src="/Star.svg"
@@ -751,7 +691,6 @@ export default function Header({
                                     />
                                     <span>{b.rating ?? 0}</span>
                                   </div>
-
                                   <p className="mt-1 text-xs text-brand-neutral-600">
                                     {b.publishedYear}
                                   </p>

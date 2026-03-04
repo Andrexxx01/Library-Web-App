@@ -1,7 +1,7 @@
 import type { Book } from "@/types/book";
 
 export type CartItem = {
-  id: number; // cartItemId
+  id: number; 
   bookId: number;
   addedAt: string; 
   book: Book;

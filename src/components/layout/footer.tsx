@@ -28,18 +28,15 @@ export default function Footer() {
               Booky
             </span>
           </div>
-
           {/* Description */}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-zinc-600 md:mt-6 md:text-base md:leading-7">
             Discover inspiring stories & timeless knowledge, ready to borrow
             anytime. Explore online or visit our nearest library branch.
           </p>
-
           {/* Follow */}
           <p className="mt-10 text-sm font-semibold text-black md:mt-12 md:text-base">
             Follow on Social Media
           </p>
-
           {/* Social icons */}
           <div className="mt-5 flex items-center gap-4 md:mt-6">
             {socials.map((s) => (

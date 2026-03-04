@@ -2,17 +2,13 @@
 
 import Header from "@/components/layout/header";
 import { useAppSelector } from "@/store/hooks";
+import { useCartQuery } from "@/services/queries/cart";
 
 export default function HeaderContainer() {
   const { token, user, isAuthenticated } = useAppSelector((s) => s.auth);
+  const authed = !!token && !!user;
+  const cartQuery = useCartQuery({ enabled: authed });
+  const cartCount = cartQuery.data?.data?.itemCount ?? 0;
 
-  // sementara cartCount masih 0 (nanti ambil dari cart query)
-  const cartCount = 0;
-
-  return (
-    <Header
-      cartCount={cartCount}
-      isAuthenticated={isAuthenticated && !!token && !!user}
-    />
-  );
+  return <Header cartCount={cartCount} isAuthenticated={authed} />;
 }
